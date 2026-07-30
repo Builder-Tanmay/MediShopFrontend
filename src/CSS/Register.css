@@ -1,0 +1,134 @@
+/* Full Page Wrapper */
+.register-page {
+  background-color: #f8f9fa;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2.5rem 1rem;
+}
+
+/* Card Styling */
+.register-card {
+  background: #ffffff;
+  padding: 2.5rem 2rem;
+  border-radius: 12px;
+  border: 1px solid #eaedf1;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+  width: 100%;
+}
+
+/* Logo Styling */
+.register-card .logo {
+  font-size: 1.8rem;
+  font-weight: 700;
+  text-align: center;
+  letter-spacing: -0.5px;
+  margin-bottom: 0.5rem;
+}
+
+.register-card .logo .medi {
+  color: #2b6cb0; /* Professional medical blue */
+}
+
+.register-card .logo .shop {
+  color: #2f855a; /* Forest green */
+}
+
+/* Header & Subtitle */
+.register-card h3 {
+  font-size: 1.35rem;
+  font-weight: 600;
+  color: #2d3748;
+  text-align: center;
+  margin-top: 0.75rem;
+  margin-bottom: 0.25rem;
+}
+
+.register-card .subtitle {
+  font-size: 0.875rem;
+  color: #718096;
+  text-align: center;
+  margin-bottom: 1.75rem;
+}
+
+/* Form Labels & Inputs */
+.register-card .form-label,
+.register-card label {
+  font-size: 0.825rem;
+  font-weight: 600;
+  color: #4a5568;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 0.4rem;
+  display: block;
+}
+
+.register-card .form-control,
+.register-card .form-select {
+  border-radius: 6px;
+  padding: 0.65rem 0.9rem;
+  font-size: 0.925rem;
+  border: 1px solid #cbd5e0;
+  color: #2d3748;
+  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+.register-card .form-control:focus,
+.register-card .form-select:focus {
+  border-color: #2b6cb0;
+  box-shadow: 0 0 0 3px rgba(43, 108, 176, 0.15);
+  outline: none;
+}
+
+.register-card .form-control::placeholder {
+  color: #a0aec0;
+  font-size: 0.875rem;
+}
+
+/* Primary Button (Register Button) */
+.register-card .register-btn {
+  width: 100%;
+  border-radius: 6px;
+  padding: 0.65rem 1.1rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  background-color: #2b6cb0;
+  border: 1px solid #2b6cb0;
+  color: #ffffff;
+  cursor: pointer;
+  transition: background-color 0.15s ease-in-out, border-color 0.15s ease-in-out;
+}
+
+.register-card .register-btn:hover {
+  background-color: #2c5282;
+  border-color: #2c5282;
+  transform: none; /* Clean transition without jarring shift */
+}
+
+/* Footer Link (Login Link) */
+.register-card .login-link {
+  text-align: center;
+  margin-top: 1.5rem;
+  font-size: 0.875rem;
+  color: #718096;
+}
+
+.register-card .login-link a {
+  text-decoration: none;
+  color: #2b6cb0;
+  font-weight: 600;
+  margin-left: 0.25rem;
+}
+
+.register-card .login-link a:hover {
+  text-decoration: underline;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 576px) {
+  .register-card {
+    padding: 1.75rem 1.25rem;
+    margin: 0 0.5rem;
+  }
+}

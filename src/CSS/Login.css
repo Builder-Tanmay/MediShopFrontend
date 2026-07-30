@@ -1,0 +1,144 @@
+/* Full Page Wrapper */
+.login-page {
+  background-color: #f8f9fa;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Card Styling */
+.login-card {
+  background: #ffffff;
+  padding: 2.5rem 2rem;
+  border-radius: 12px;
+  border: 1px solid #eaedf1;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+  width: 100%;
+}
+
+/* Logo Styling */
+.login-card .logo {
+  font-size: 1.8rem;
+  font-weight: 700;
+  text-align: center;
+  letter-spacing: -0.5px;
+  margin-bottom: 0.5rem;
+}
+
+.login-card .logo .medi {
+  color: #2b6cb0; /* Professional medical blue */
+}
+
+.login-card .logo .shop {
+  color: #2f855a; /* Forest green */
+}
+
+/* Header & Text */
+.login-card h3 {
+  font-size: 1.35rem;
+  font-weight: 600;
+  color: #2d3748;
+  text-align: center;
+  margin-top: 0.75rem;
+  margin-bottom: 0.25rem;
+}
+
+.login-card .subtitle {
+  font-size: 0.875rem;
+  color: #718096;
+  text-align: center;
+  margin-bottom: 1.75rem;
+}
+
+/* Form Controls */
+.login-card label {
+  font-size: 0.825rem;
+  font-weight: 600;
+  color: #4a5568;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 0.4rem;
+  display: block;
+}
+
+.login-card .form-control {
+  border-radius: 6px;
+  padding: 0.65rem 0.9rem;
+  font-size: 0.925rem;
+  border: 1px solid #cbd5e0;
+  color: #2d3748;
+  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+.login-card .form-control:focus {
+  border-color: #2b6cb0;
+  box-shadow: 0 0 0 3px rgba(43, 108, 176, 0.15);
+}
+
+.login-card .form-control::placeholder {
+  color: #a0aec0;
+  font-size: 0.875rem;
+}
+
+/* Forgot Password Link */
+.login-card .forgot {
+  display: block;
+  text-align: right;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: #2b6cb0;
+  text-decoration: none;
+  margin-top: 0.5rem;
+  margin-bottom: 1.25rem;
+}
+
+.login-card .forgot:hover {
+  text-decoration: underline;
+}
+
+/* Primary Button (Login Button) */
+.login-card .login-btn {
+  width: 100%;
+  border-radius: 6px;
+  padding: 0.65rem 1.1rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  background-color: #2b6cb0;
+  border: 1px solid #2b6cb0;
+  color: #ffffff;
+  cursor: pointer;
+  transition: background-color 0.15s ease-in-out, border-color 0.15s ease-in-out;
+}
+
+.login-card .login-btn:hover {
+  background-color: #2c5282;
+  border-color: #2c5282;
+}
+
+/* Register Section Link */
+.login-card .register {
+  text-align: center;
+  margin-top: 1.5rem;
+  font-size: 0.875rem;
+  color: #718096;
+}
+
+.login-card .register a {
+  text-decoration: none;
+  color: #2b6cb0;
+  font-weight: 600;
+  margin-left: 0.25rem;
+}
+
+.login-card .register a:hover {
+  text-decoration: underline;
+}
+
+/* Responsive Tweaks */
+@media (max-width: 576px) {
+  .login-card {
+    padding: 1.75rem 1.25rem;
+    margin: 0 0.5rem;
+  }
+}
