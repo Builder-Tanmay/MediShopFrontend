@@ -1,38 +1,80 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom"; // Added missing import
 import "../CSS/ForgotPassword.css";
+import axios from "axios";
 
 const ForgotPassword = () => {
+  const navigate = useNavigate(); // Initialized navigate hook
+
   // Step tracker: 1 = Email, 2 = OTP, 3 = New Password
   const [step, setStep] = useState(1);
 
-  // Form values store karne ke liye states
+  // Form values
   const [email, setEmail] = useState("");
   const [otp, setOtp] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  
+  // Loading indicator state
+  const [loading, setLoading] = useState(false);
 
-  // Handlers
-  const handleSendOtp = () => {
+  // Step 1: Send OTP Handler (Added async)
+  const handleSendOtp = async () => {
     if (!email) return alert("Please enter your email!");
-    // API call logic yahan aayega
-    setStep(2); // Step 2 par switch karein
+    setLoading(true);
+    try {
+      // Endpoint matched with Spring Boot @PostMapping("/send-otp")
+      await axios.post(`http://localhost:8080/user/send-otp?email=${encodeURIComponent(email)}`);
+      alert("OTP sent to your email!");
+      setStep(2);
+    } catch (err) {
+      console.error("Send OTP Error:", err);
+      alert(err.response?.data || "Failed to send OTP. Please check your email address.");
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const handleValidateOtp = () => {
+  // Step 2: Validate OTP Handler (Added async)
+  const handleValidateOtp = async () => {
     if (!otp) return alert("Please enter the OTP!");
-    // API call logic yahan aayega
-    setStep(3); // Step 3 par switch karein
+    setLoading(true);
+    try {
+      await axios.post(
+        `http://localhost:8080/user/validate-otp?email=${encodeURIComponent(email)}&otp=${encodeURIComponent(otp)}`
+      );
+      alert("OTP Validated!");
+      setStep(3);
+    } catch (err) {
+      console.error("Validate OTP Error:", err);
+      alert(err.response?.data || "Invalid OTP! Please try again.");
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const handleResetPassword = () => {
+  // Step 3: Reset Password Handler
+  const handleResetPassword = async () => {
     if (!newPassword || !confirmPassword) {
       return alert("Please fill both password fields!");
     }
     if (newPassword !== confirmPassword) {
       return alert("Passwords do not match!");
     }
-    // Final submit logic yahan aayega
-    alert("Password reset successfully!");
+
+    setLoading(true);
+    try {
+      await axios.post(
+        `http://localhost:8080/user/reset-password?email=${encodeURIComponent(email)}&newPassword=${encodeURIComponent(newPassword)}`
+      );
+      alert("Password reset successfully! Redirecting to login...");
+      navigate("/login");
+    } catch (err) {
+      console.error("Reset Password Error:", err);
+      alert(err.response?.data || "Failed to reset password.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -61,14 +103,16 @@ const ForgotPassword = () => {
                       placeholder="Enter your registered email"
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
+                      disabled={loading}
                     />
 
                     <button
                       type="button"
                       className="btn btn-primary w-100 mt-3"
                       onClick={handleSendOtp}
+                      disabled={loading}
                     >
-                      Send OTP
+                      {loading ? "Sending..." : "Send OTP"}
                     </button>
                   </div>
                 )}
@@ -83,6 +127,7 @@ const ForgotPassword = () => {
                       placeholder="Enter OTP"
                       value={otp}
                       onChange={(e) => setOtp(e.target.value)}
+                      disabled={loading}
                     />
 
                     <div className="d-flex justify-content-between mt-3">
@@ -90,16 +135,18 @@ const ForgotPassword = () => {
                         type="button"
                         className="btn btn-outline-primary"
                         onClick={handleSendOtp}
+                        disabled={loading}
                       >
-                        Resend OTP
+                        {loading ? "Sending..." : "Resend OTP"}
                       </button>
 
                       <button
                         type="button"
                         className="btn btn-success"
                         onClick={handleValidateOtp}
+                        disabled={loading}
                       >
-                        Validate OTP
+                        {loading ? "Validating..." : "Validate OTP"}
                       </button>
                     </div>
                   </div>
@@ -115,6 +162,7 @@ const ForgotPassword = () => {
                       placeholder="Enter New Password"
                       value={newPassword}
                       onChange={(e) => setNewPassword(e.target.value)}
+                      disabled={loading}
                     />
 
                     <label className="mt-3">Confirm Password</label>
@@ -124,14 +172,16 @@ const ForgotPassword = () => {
                       placeholder="Confirm New Password"
                       value={confirmPassword}
                       onChange={(e) => setConfirmPassword(e.target.value)}
+                      disabled={loading}
                     />
 
                     <button
                       type="button"
                       className="btn btn-danger w-100 mt-4"
                       onClick={handleResetPassword}
+                      disabled={loading}
                     >
-                      Reset Password
+                      {loading ? "Resetting..." : "Reset Password"}
                     </button>
                   </div>
                 )}

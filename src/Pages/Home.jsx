@@ -394,27 +394,7 @@ const Home = () => {
       </div>
     </section>
 
-    <section className="trust-badges-section">
-      <div className="container">
-        <div className="trust-badges-card">
-          <div className="row g-4">
-            {trustItems.map((item) => (
-              <div key={item.id} className="col-lg-3 col-sm-6">
-                <div className="trust-badge-item">
-                  <div className={`badge-icon-box ${item.themeClass}`}>
-                    {item.icon}
-                  </div>
-                  <div className="badge-text">
-                    <h6>{item.title}</h6>
-                    <p>{item.description}</p>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-    </section>
+   
 
 
     </>

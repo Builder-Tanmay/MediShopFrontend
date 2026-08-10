@@ -27,9 +27,19 @@ const Login = () => {
                     }
                 );
                 console.log(response.data);
-
+                localStorage.setItem("user",JSON.stringify({
+                  id:response.data.id,
+                  role:response.data.role,
+                  user:response.data
+                }))
                 alert("Login Successfully...");
-                navigate("/UserDashboard");
+                if(response.data.role==="Admin"){
+                  navigate("/admindashboard");
+                }
+                else{
+                   navigate("/userdashboard");
+                }
+               
         
             } catch (error) {
               console.error("Login Error:" ,error);

@@ -1,4 +1,241 @@
-*{
-    font-family: monospace;
+/* ==========================================
+   THEME VARIABLES & FOOTER BASE
+   ========================================== */
+:root {
+  --footer-bg: #f5f8fa;
+  --teal-primary: #0d9488;
+  --teal-dark: #0f766e;
+  --teal-light: #e6fffa;
+  --slate-dark: #0f172a;
+  --slate-body: #475569;
+  --slate-muted: #94a3b8;
+  --border-subtle: #e2e8f0;
+  --shadow-card: 0 4px 20px rgba(15, 23, 42, 0.05);
 }
 
+.medishop-footer-section {
+  position: relative;
+  background-color: var(--footer-bg);
+  padding-top: 80px;
+  padding-bottom: 30px;
+  overflow: hidden;
+  font-family: system-ui, -apple-system, sans-serif;
+  color: var(--slate-body);
+}
+
+/* ==========================================
+   BRAND & DESCRIPTION
+   ========================================== */
+.footer-brand-title {
+  font-size: 2.2rem;
+  font-weight: 800;
+  letter-spacing: -0.8px;
+  margin-bottom: 16px;
+}
+
+.footer-brand-title .text-teal {
+  color: var(--teal-primary) !important;
+}
+
+.footer-brand-title .text-dark {
+  color: var(--slate-dark) !important;
+}
+
+.footer-brand-desc {
+  font-size: 1rem;
+  line-height: 1.65;
+  color: var(--slate-body);
+  max-width: 440px;
+}
+
+/* ==========================================
+   QUICK LINKS SECTION
+   ========================================== */
+.footer-heading {
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 1.2px;
+  color: var(--slate-muted);
+  margin-bottom: 20px;
+  text-transform: uppercase;
+}
+
+.footer-links-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.footer-links-list li {
+  margin-bottom: 12px;
+}
+
+.footer-links-list a {
+  color: var(--slate-dark);
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 1rem;
+  transition: color 0.2s ease, transform 0.2s ease;
+  display: inline-block;
+}
+
+.footer-links-list a:hover {
+  color: var(--teal-primary);
+  transform: translateX(3px);
+}
+
+/* ==========================================
+   CONTACT CARDS
+   ========================================== */
+.contact-cards-container {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.footer-contact-card {
+  display: flex;
+  align-items: center;
+  background: #ffffff;
+  border: 1px solid var(--border-subtle);
+  border-radius: 16px;
+  padding: 14px 20px;
+  text-decoration: none !important;
+  box-shadow: var(--shadow-card);
+  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+}
+
+.footer-contact-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px rgba(13, 148, 136, 0.12);
+  border-color: var(--teal-primary);
+}
+
+.contact-icon-box {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background: var(--teal-light);
+  color: var(--teal-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  margin-right: 16px;
+  flex-shrink: 0;
+}
+
+.contact-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.contact-label {
+  font-size: 0.78rem;
+  color: var(--slate-muted);
+  font-weight: 500;
+}
+
+.contact-value {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--slate-dark);
+}
+
+/* ==========================================
+   FLOATING SOCIAL PILLS BAR
+   ========================================== */
+.footer-social-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  margin-top: 60px;
+  margin-bottom: 30px;
+  position: relative;
+  z-index: 3;   
+}
+
+.social-pill {
+  width: 48px;
+  height: 48px;
+  border-radius: 14px;
+  background: #ffffff;
+  border: 1px solid var(--border-subtle);
+  color: var(--slate-dark);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.15rem;
+  text-decoration: none !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.social-pill:hover {
+  color: #ffffff;
+  background: var(--teal-primary);
+  border-color: var(--teal-primary);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(13, 148, 136, 0.3);
+}
+
+/* ==========================================
+   CENTER EMBLEM BADGE
+   ========================================== */
+.footer-emblem-box {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 25px;
+  position: relative;
+  z-index: 3;
+}
+
+.emblem-inner {
+  background: #0f172a;
+  color: #ffffff;
+  padding: 14px 28px;
+  border-radius: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  box-shadow: 0 10px 30px rgba(15, 23, 42, 0.25);
+}
+
+.emblem-inner i {
+  font-size: 1.4rem;
+  color: #2dd4bf;
+}
+
+.emblem-text {
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 2px;
+}
+
+/* ==========================================
+   BOTTOM BAR & WATERMARK
+   ========================================== */
+.footer-bottom-bar {
+  text-align: center;
+  font-size: 0.9rem;
+  color: var(--slate-muted);
+  position: relative;
+  z-index: 3;
+}
+
+.footer-bg-watermark {
+  position: absolute;
+  bottom: 60px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: clamp(4rem, 12vw, 11rem);
+  font-weight: 900;
+  color: rgba(15, 23, 42, 0.035);
+  letter-spacing: 4px;
+  white-space: nowrap;
+  pointer-events: none;
+  user-select: none;
+  z-index: 1;
+}

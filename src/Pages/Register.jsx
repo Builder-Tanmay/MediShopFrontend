@@ -5,7 +5,7 @@ import "../CSS/Register.css";
 
 const Register = () => {
 
-    const [fullname, setfullname] = useState("");
+    const [fullName, setfullName] = useState("");
     const [email, setemail] = useState("");
     const [password, setpassword] = useState("");
     const [contact, setcontact] = useState("");
@@ -16,7 +16,7 @@ const Register = () => {
         e.preventDefault();
 
         const user = {
-            fullName: fullname,
+            fullName: fullName,
             email: email,
             password: password,
             contact: contact,
@@ -32,9 +32,9 @@ const Register = () => {
                 user
             );
 
-            alert(response.data);
+            alert('Registered Successfully!!');
 
-            setfullname("");
+            setfullName("");
             setemail("");
             setpassword("");
             setcontact("");
@@ -46,8 +46,6 @@ const Register = () => {
 
             if (error.response) {
                 alert(error.response.data);
-            } else {
-                alert("Server Error");
             }
 
         }
@@ -93,8 +91,8 @@ const Register = () => {
                                         type="text"
                                         className="form-control"
                                         placeholder="Enter your full name"
-                                        value={fullname}
-                                        onChange={(e) => setfullname(e.target.value)}
+                                        value={fullName}
+                                        onChange={(e) => setfullName(e.target.value)}
                                         required
                                     />
 
