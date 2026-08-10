@@ -99,7 +99,7 @@ function Header() {
 
             <li className="nav-item">
               <NavLink 
-                to="/blogs" 
+                to="/cart" 
                 data-tooltip="Blogs"
                 className={({ isActive }) => `nav-icon-btn d-flex align-items-center justify-content-center ${isActive ? 'active-icon' : ''}`}
               >
@@ -109,8 +109,8 @@ function Header() {
 
             <li className="nav-item">
               <NavLink 
-                to="/career" 
-                data-tooltip="Career"
+                to="/products" 
+                data-tooltip="Products"
                 className={({ isActive }) => `nav-icon-btn d-flex align-items-center justify-content-center ${isActive ? 'active-icon' : ''}`}
               >
                 <Briefcase size={22} strokeWidth={1.8} />

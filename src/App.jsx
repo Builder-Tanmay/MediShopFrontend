@@ -14,6 +14,7 @@ import ForgotPassword from './Pages/ForgotPassword';
 
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.min.js";
+import Products from './Pages/Products';
 
 // Layout component to selectively render Header and Footer
 const MainLayout = ({ children }) => {
@@ -44,6 +45,7 @@ function App() {
           <Route path="/forgot" element={<ForgotPassword />} />
           <Route path="/userdashboard" element={<UserDashboard />} />
           <Route path="/admindashboard" element={<AdminDashboard />} />
+          <Route path="/products" element={<Products />} />
         </Routes>
       </MainLayout>
     </BrowserRouter>
