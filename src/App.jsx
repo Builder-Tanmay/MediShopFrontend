@@ -15,6 +15,8 @@ import ForgotPassword from './Pages/ForgotPassword';
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.min.js";
 import Products from './Pages/Products';
+import OrderSummary from './Pages/OrderSummary';
+import Contact from './Pages/Contect';
 
 // Layout component to selectively render Header and Footer
 const MainLayout = ({ children }) => {
@@ -39,6 +41,7 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/about" element={<About />} />
           <Route path="/services" element={<Services />} />
+          <Route path="/contact" element={<Contact />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/cart" element={<Cart />} />
@@ -46,6 +49,7 @@ function App() {
           <Route path="/userdashboard" element={<UserDashboard />} />
           <Route path="/admindashboard" element={<AdminDashboard />} />
           <Route path="/products" element={<Products />} />
+          <Route path="/order-summary" element={<OrderSummary />} />
         </Routes>
       </MainLayout>
     </BrowserRouter>

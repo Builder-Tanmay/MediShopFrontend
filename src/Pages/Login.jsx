@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState } from 'react';
 import '../CSS/Login.css';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
@@ -9,138 +9,122 @@ const Login = () => {
 
     const navigate = useNavigate();
 
-      const handleSubmit = async (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
 
         try {
-        
-                // console.log(user);
-                
-             const response = await axios.post(
-                    "http://localhost:8080/user/login",
-                    null,
-                    {
-                        params: {
-                            email: email,
-                            password: password
-                        }
+            const response = await axios.post(
+                "http://localhost:8080/user/login",
+                null,
+                {
+                    params: {
+                        email: email,
+                        password: password
                     }
-                );
-                console.log(response.data);
-                localStorage.setItem("user",JSON.stringify({
-                  id:response.data.id,
-                  role:response.data.role,
-                  user:response.data
-                }))
-                alert("Login Successfully...");
-                if(response.data.role==="Admin"){
-                  navigate("/admindashboard");
                 }
-                else{
-                   navigate("/userdashboard");
-                }
-               
-        
-            } catch (error) {
-              console.error("Login Error:" ,error);
-              if (error.response) {
+            );
+            
+            console.log("Login response:", response.data);
+            
+            // Save the user data to localStorage
+            localStorage.setItem("user", JSON.stringify({
+              id: response.data.id,
+              role: response.data.role,
+              user: response.data
+            }));
+
+            // Dispatch custom 'auth-change' event so Header updates instantly without refreshing!
+            window.dispatchEvent(new CustomEvent("auth-change"));
+
+            alert("Login Successfully...");
+
+            if (response.data.role === "Admin") {
+                navigate("/admindashboard");
+            } else {
+                navigate("/userdashboard");
+            }
+
+        } catch (error) {
+            console.error("Login Error:", error);
+            if (error.response) {
                 alert(error.response.data);
-              } else {
+            } else {
                 alert("Server Error");
-              }
+            }
         }
+    };
 
-      }
-  return (
-   <>
-    <div className="login-page">
+    return (
+        <>
+            <div className="login-page">
+                <div className="container">
+                    <div className="row justify-content-center">
+                        <div className="col-lg-5 col-md-7 col-sm-10">
+                            <div className="login-card">
 
-      <div className="container">
+                                <h2 className="logo">
+                                    <span className="medi">Medi</span>
+                                    <span className="shop">Shop</span>
+                                </h2>
 
-        <div className="row justify-content-center">
+                                <h3>Welcome Back 👋</h3>
 
-          <div className="col-lg-5 col-md-7 col-sm-10">
+                                <p className="subtitle">
+                                    Login to continue shopping.
+                                </p>
 
-            <div className="login-card">
+                                <form onSubmit={handleSubmit}>
 
-              <h2 className="logo">
-                <span className="medi">Medi</span>
-                <span className="shop">Shop</span>
-              </h2>
+                                    <div className="mb-3">
+                                        <label>Email Address</label>
+                                        <input
+                                            type="email"
+                                            className="form-control"
+                                            placeholder="Enter your email"
+                                            value={email}
+                                            onChange={(e) => setemail(e.target.value)}
+                                            required
+                                        />
+                                    </div>
 
-              <h3>Welcome Back 👋</h3>
+                                    <div className="mb-3">
+                                        <label>Password</label>
+                                        <input
+                                            type="password"
+                                            className="form-control"
+                                            placeholder="Enter your password"
+                                            value={password}
+                                            onChange={(e) => setpassword(e.target.value)}
+                                            required
+                                        />
+                                    </div>
 
-              <p className="subtitle">
-                Login to continue shopping.
-              </p>
+                                    <div className="text-end">
+                                        <Link to="/forgot" className="forgot">
+                                            Forgot Password?
+                                        </Link>
+                                    </div>
 
-              <form onSubmit={handleSubmit}>
+                                    <button type="submit" className="btn login-btn mt-4">
+                                        Login
+                                    </button>
 
-                <div className="mb-3">
+                                </form>
 
-                  <label>Email Address</label>
+                                <div className="register">
+                                    Don't have an account?{" "}
+                                    <Link to="/register">
+                                        Register
+                                    </Link>
+                                </div>
 
-                  <input
-                    type="email"
-                    className="form-control"
-                    placeholder="Enter your email"
-                    value={email}
-                    onChange={(e) => setemail(e.target.value)}
-                    required
-                  />
-
+                            </div>
+                        </div>
+                    </div>
                 </div>
-
-                <div className="mb-3">
-
-                  <label>Password</label>
-
-                  <input
-                    type="password"
-                    className="form-control"
-                    placeholder="Enter your password"
-                    value={password}
-                    onChange={(e) => setpassword(e.target.value)}
-                    required
-                  />
-
-                </div>
-
-                <div className="text-end">
-
-                  <Link to="/forgot" className="forgot">
-                    Forgot Password?
-                  </Link>
-
-                </div>
-
-                <button type="submit" className="btn login-btn mt-4">
-                  Login
-                </button>
-
-              </form>
-
-              <div className="register">
-
-                Don't have an account?
-
-                <Link to="/register">
-                  Register
-                </Link>
-
-              </div>
-
             </div>
+        </>
+    );
+};
 
-          </div>
-
-        </div>
-
-      </div>
-
-    </div>
-   </>
-  )
-}
-
-export default Login
+export default Login;

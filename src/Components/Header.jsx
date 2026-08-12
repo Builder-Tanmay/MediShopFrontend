@@ -1,32 +1,87 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Link, NavLink, useNavigate } from 'react-router-dom';
 import { 
   Home, 
   Info, 
   Layers, 
-  BookOpen, 
   Briefcase, 
   Mail, 
   ShoppingCart, 
-  LogOut 
+  LogOut,
+  Heart,
+  Settings,
+  LayoutDashboard
 } from 'lucide-react';
 import '../Css/Header.css';
+
+// Helper function to dispatch custom event and trigger immediate Navbar refresh
+export const notifyAuthChange = () => {
+  window.dispatchEvent(new CustomEvent("auth-change"));
+};
 
 function Header() {
   const navigate = useNavigate();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [currentUser, setCurrentUser] = useState("");
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const dropdownRef = useRef(null);
 
-  // Function to check if user exists in localStorage
+  // Helper function to extract ONLY the user's name string from localStorage
+  const extractUserName = (userData) => {
+    if (!userData) return "";
+
+    try {
+      // 1. Try parsing JSON object
+      const parsed = typeof userData === "string" ? JSON.parse(userData) : userData;
+
+      if (typeof parsed === "object" && parsed !== null) {
+        // Check both nested 'user' object and root object fields
+        const userObj = parsed.user || parsed;
+
+        const extracted = 
+          userObj.fullName || 
+          userObj.name || 
+          userObj.userName || 
+          userObj.username || 
+          userObj.firstName || 
+          userObj.MedicineName || 
+          (userObj.email ? userObj.email.split('@')[0] : null);
+
+        if (extracted && typeof extracted === "string" && extracted.trim() !== "") {
+          return extracted.trim();
+        }
+      } else if (typeof parsed === "string" && !parsed.trim().startsWith("{")) {
+        return parsed.trim();
+      }
+    } catch (e) {
+      // 2. Fallback for raw non-JSON string
+      if (typeof userData === "string" && !userData.trim().startsWith("{")) {
+        return userData.trim();
+      }
+    }
+
+    return "User"; // Safe fallback instead of printing raw JSON
+  };
+
+  // Check user authentication & session state
   const checkAuth = () => {
-    const user = localStorage.getItem("user");
-    setIsLoggedIn(!!user); // Converts object/null to boolean true/false
+    const rawUserData = localStorage.getItem("user");
+
+    if (rawUserData && rawUserData !== "undefined" && rawUserData !== "null") {
+      const extractedName = extractUserName(rawUserData);
+      setCurrentUser(extractedName || "User");
+      setIsLoggedIn(true);
+    } else {
+      setCurrentUser("");
+      setIsLoggedIn(false);
+    }
   };
 
   useEffect(() => {
-    // 1. Check auth status on component mount
+    // 1. Initial check on component mount
     checkAuth();
 
-    // 2. Listen for custom 'auth-change' event (same tab) and 'storage' event (other tabs)
+    // 2. Listen for custom 'auth-change' event (same tab) and 'storage' event (multi-tab)
     window.addEventListener("auth-change", checkAuth);
     window.addEventListener("storage", checkAuth);
 
@@ -36,16 +91,36 @@ function Header() {
     };
   }, []);
 
+  // Close dropdown menu when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setIsDropdownOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
   // Logout Handler
   const handleLogout = () => {
-    localStorage.removeItem("user"); // Clear user session from DB
+    localStorage.removeItem("user");
+    localStorage.removeItem("medishop_cart");
     setIsLoggedIn(false);
+    setCurrentUser("");
+    setIsDropdownOpen(false);
     
-    // Notify application of auth change
-    window.dispatchEvent(new CustomEvent("auth-change"));
+    // Notify application to update navbar immediately
+    notifyAuthChange();
 
     alert("Logged out successfully!");
     navigate("/login");
+  };
+
+  // Get initial character for Avatar
+  const getUserInitial = () => {
+    if (!currentUser || currentUser.trim() === "") return "U";
+    return currentUser.charAt(0).toUpperCase();
   };
 
   return (
@@ -53,11 +128,11 @@ function Header() {
       <nav className="glass-navbar d-flex align-items-center justify-content-between rounded-pill">
         
         {/* Brand Logo */}
-        <Link to="/" className="brand-logo d-flex align-items-center justify-content-center  text-decoration-none ">
-            <h2 className="footer-brand-title">
-              <span className="text-teal">Medi</span>
-              <span className="text-dark">Shop</span>
-            </h2>
+        <Link to="/" className="brand-logo d-flex align-items-center justify-content-center text-decoration-none">
+          <h2 className="footer-brand-title m-0">
+            <span className="text-teal">Medi</span>
+            <span className="text-dark">Shop</span>
+          </h2>
         </Link>
         
         <div className="nav-divider"></div>
@@ -99,16 +174,6 @@ function Header() {
 
             <li className="nav-item">
               <NavLink 
-                to="/cart" 
-                data-tooltip="Blogs"
-                className={({ isActive }) => `nav-icon-btn d-flex align-items-center justify-content-center ${isActive ? 'active-icon' : ''}`}
-              >
-                <BookOpen size={22} strokeWidth={1.8} />
-              </NavLink>
-            </li>
-
-            <li className="nav-item">
-              <NavLink 
                 to="/products" 
                 data-tooltip="Products"
                 className={({ isActive }) => `nav-icon-btn d-flex align-items-center justify-content-center ${isActive ? 'active-icon' : ''}`}
@@ -127,7 +192,7 @@ function Header() {
               </NavLink>
             </li>
 
-            {/* Cart Icon (Renders ONLY when user is logged in) */}
+            {/* Cart Icon - ONLY renders when user is logged in */}
             {isLoggedIn && (
               <li className="nav-item">
                 <NavLink 
@@ -145,11 +210,10 @@ function Header() {
 
         <div className="nav-divider"></div>
 
-        {/* Auth Buttons */}
+        {/* Auth Buttons or User Profile Avatar Dropdown */}
         <div className="d-flex align-items-center nav-actions flex-shrink-0">
           {!isLoggedIn ? (
             <>
-              {/* Show Login & Sign Up when NOT logged in */}
               <Link 
                 to="/login" 
                 className="btn-login-link text-decoration-none fw-medium"
@@ -165,15 +229,65 @@ function Header() {
               </Link>
             </>
           ) : (
-            /* Show Logout when logged in */
-            <button 
-              type="button"
-              onClick={handleLogout} 
-              className="btn-logout-pill fw-medium d-flex align-items-center gap-2"
-            >
-              <LogOut size={16} />
-              <span className="d-none d-sm-inline">Logout</span>
-            </button>
+            /* User Avatar + Dropdown Menu */
+            <div className="user-profile-dropdown-container" ref={dropdownRef}>
+              <button 
+                type="button" 
+                className="avatar-btn d-flex align-items-center justify-content-center"
+                onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                title={currentUser}
+              >
+                {getUserInitial()}
+              </button>
+
+              {isDropdownOpen && (
+                <div className="user-dropdown-menu">
+                  <div className="dropdown-user-header">
+                    <span className="user-welcome">Hello,</span>
+                    <strong className="user-display-name">{currentUser}</strong>
+                  </div>
+                  <hr className="dropdown-divider" />
+                  
+                  <Link 
+                    to="/userdashboard" 
+                    className="dropdown-item-link"
+                    onClick={() => setIsDropdownOpen(false)}
+                  >
+                    <LayoutDashboard size={18} />
+                    <span>User Dashboard</span>
+                  </Link>
+
+                  <Link 
+                    to="/wishlist" 
+                    className="dropdown-item-link"
+                    onClick={() => setIsDropdownOpen(false)}
+                  >
+                    <Heart size={18} />
+                    <span>Wishlist</span>
+                  </Link>
+
+                  <Link 
+                    to="/userdashboard" 
+                    className="dropdown-item-link"
+                    onClick={() => setIsDropdownOpen(false)}
+                  >
+                    <Settings size={18} />
+                    <span>Account Settings</span>
+                  </Link>
+
+                  <hr className="dropdown-divider" />
+
+                  <button 
+                    type="button" 
+                    onClick={handleLogout} 
+                    className="dropdown-logout-btn"
+                  >
+                    <LogOut size={18} />
+                    <span>Logout</span>
+                  </button>
+                </div>
+              )}
+            </div>
           )}
         </div>
 

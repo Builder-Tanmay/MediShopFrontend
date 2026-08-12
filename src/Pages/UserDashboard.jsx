@@ -56,6 +56,20 @@ const UserDashboard = () => {
     setSortPrice('DEFAULT');
   };
 
+   const handleAddToCart = (product) => {
+    let cart = JSON.parse(localStorage.getItem("medishop_cart")) || [];
+    const existingIndex = cart.findIndex((item) => item.id === product.id);
+
+    if (existingIndex > -1) {
+      cart[existingIndex].Quantity = (cart[existingIndex].Quantity || 1) + 1;
+    } else {
+      cart.push({ ...product, Quantity: 1 });
+    }
+
+    localStorage.setItem("medishop_cart", JSON.stringify(cart));
+    alert(`${product.MedicineName} added to cart successfully!`);
+  };
+
   return (
     <div className="container py-4 page-container">
       {/* Welcome Heading */}
@@ -128,7 +142,7 @@ const UserDashboard = () => {
           {filteredMedicines.map((medicine) => {
             const medId = medicine.id || medicine.medicineId;
             const isWishlisted = wishlist[medId];
-
+            const isAvailable = medicine.Quantity > 0;
             return (
               <div className="col-12 col-md-6 col-lg-4" key={medId}>
                 <div className="card h-100 med-card border-0 shadow-sm rounded-3">
@@ -160,9 +174,20 @@ const UserDashboard = () => {
                     {/* Price and Cart Action */}
                     <div className="d-flex justify-content-between align-items-center mt-3 pt-2 border-top">
                       <span className="fs-5 fw-bold text-teal">₹{medicine.Price}</span>
-                      <button type="button" className="btn btn-teal-sm">
-                        Add to cart
-                      </button>
+                      
+                        
+                      <button
+                          className="btn-add-cart"
+                          disabled={!isAvailable}
+                          onClick={() => handleAddToCart(product)}
+                        >
+                          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                            <circle cx="9" cy="21" r="1"></circle>
+                            <circle cx="20" cy="21" r="1"></circle>
+                            <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                          </svg>
+                          Add
+                        </button>
                     </div>
                   </div>
 

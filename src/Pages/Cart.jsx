@@ -1,77 +1,49 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import "../CSS/Cart.css";
 
 const Cart = () => {
+  const navigate = useNavigate();
   const [cartItems, setCartItems] = useState([]);
 
-  /* ============================================================
-   * BACKEND INTEGRATION LOGIC (UNCOMMENT WHEN API IS READY)
-   * ============================================================
-   * 
-   * const [loading, setLoading] = useState(true);
-   * const [error, setError] = useState(null);
-   * 
-   * useEffect(() => {
-   *   const fetchCartFromBackend = async () => {
-   *     try {
-   *       setLoading(true);
-   *       const response = await fetch('/api/cart');
-   *       if (!response.ok) throw new Error('Failed to load cart');
-   *       const data = await response.json();
-   *       setCartItems(data.items || []);
-   *     } catch (err) {
-   *       setError(err.message);
-   *     } finally {
-   *       setLoading(false);
-   *     }
-   *   };
-   *   fetchCartFromBackend();
-   * }, []);
-   * 
-   * const handleQuantityChange = async (itemId, currentQty, delta) => {
-   *   const newQuantity = currentQty + delta;
-   *   if (newQuantity <= 0) return handleRemoveItem(itemId);
-   * 
-   *   try {
-   *     const response = await fetch(`/api/cart/update/${itemId}`, {
-   *       method: 'PUT',
-   *       headers: { 'Content-Type': 'application/json' },
-   *       body: JSON.stringify({ quantity: newQuantity })
-   *     });
-   *     const data = await response.json();
-   *     setCartItems(data.items);
-   *   } catch (err) {
-   *     console.error(err);
-   *   }
-   * };
-   * 
-   * const handleRemoveItem = async (itemId) => {
-   *   try {
-   *     const response = await fetch(`/api/cart/remove/${itemId}`, { method: 'DELETE' });
-   *     const data = await response.json();
-   *     setCartItems(data.items);
-   *   } catch (err) {
-   *     console.error(err);
-   *   }
-   * };
-   * 
-   * const handleCheckout = async () => {
-   *   try {
-   *     await fetch('/api/checkout', {
-   *       method: 'POST',
-   *       headers: { 'Content-Type': 'application/json' },
-   *       body: JSON.stringify({ items: cartItems, totalAmount: grandTotal })
-   *     });
-   *     alert('Order placed successfully!');
-   *   } catch (err) {
-   *     console.error(err);
-   *   }
-   * };
-   * ============================================================ */
+  useEffect(() => {
+    // Redirect unauthenticated users
+    const user = localStorage.getItem("user");
+    if (!user) {
+      alert("Please login first to view your cart!");
+      navigate("/login");
+      return;
+    }
 
+    const savedCart = JSON.parse(localStorage.getItem("medishop_cart")) || [];
+    setCartItems(savedCart);
+  }, [navigate]);
+
+  const updateLocalStorage = (updatedCart) => {
+    setCartItems(updatedCart);
+    localStorage.setItem("medishop_cart", JSON.stringify(updatedCart));
+  };
+
+  const handleQuantityChange = (itemId, currentQty, delta) => {
+    const newQuantity = currentQty + delta;
+    if (newQuantity <= 0) {
+      return handleRemoveItem(itemId);
+    }
+
+    const updated = cartItems.map((item) =>
+      item.id === itemId ? { ...item, Quantity: newQuantity } : item
+    );
+    updateLocalStorage(updated);
+  };
+
+  const handleRemoveItem = (itemId) => {
+    const updated = cartItems.filter((item) => item.id !== itemId);
+    updateLocalStorage(updated);
+  };
+
+  // Cost calculations using Java Entity Field Names (Price and Quantity)
   const subtotal = cartItems.reduce(
-    (acc, item) => acc + (item.price || 0) * (item.quantity || 0),
+    (acc, item) => acc + (item.Price || 0) * (item.Quantity || 1),
     0
   );
   const deliveryCharge = subtotal > 499 || subtotal === 0 ? 0 : 50;
@@ -102,52 +74,59 @@ const Cart = () => {
         ) : (
           <div className="cart-grid-layout">
             
-            {/* Cart Items Column */}
+            {/* Cart Items List */}
             <div className="cart-items-list">
-              {cartItems.map((item) => (
-                <div key={item._id || item.id} className="cart-item-card">
-                  <img
-                    src={item.image || "https://via.placeholder.com/80?text=Medicine"}
-                    alt={item.name}
-                    className="item-thumb"
-                  />
+              {cartItems.map((item) => {
+                const itemId = item.id;
+                const itemPrice = item.Price || 0;
+                const itemQty = item.Quantity || 1;
+                const itemName = item.MedicineName;
 
-                  <div className="item-info">
-                    <span className="item-cat">{item.category}</span>
-                    <h4 className="item-name">{item.name}</h4>
-                    <span className="item-unit-price">₹{item.price} / item</span>
-                  </div>
+                return (
+                  <div key={itemId} className="cart-item-card">
+                    <img
+                      src={item.Img || "https://via.placeholder.com/80?text=Medicine"}
+                      alt={itemName}
+                      className="item-thumb"
+                    />
 
-                  {/* Quantity Stepper */}
-                  <div className="item-qty-stepper">
+                    <div className="item-info">
+                      <span className="item-cat">{item.ManufactureName || "Medicine"}</span>
+                      <h4 className="item-name">{itemName}</h4>
+                      <span className="item-unit-price">₹{itemPrice} / item</span>
+                    </div>
+
+                    {/* Quantity Stepper */}
+                    <div className="item-qty-stepper">
+                      <button
+                        className="stepper-btn"
+                        onClick={() => handleQuantityChange(itemId, itemQty, -1)}
+                      >
+                        -
+                      </button>
+                      <span className="qty-val">{itemQty}</span>
+                      <button
+                        className="stepper-btn"
+                        onClick={() => handleQuantityChange(itemId, itemQty, 1)}
+                      >
+                        +
+                      </button>
+                    </div>
+
+                    <div className="item-subtotal">
+                      ₹{itemPrice * itemQty}
+                    </div>
+
                     <button
-                      className="stepper-btn"
-                      onClick={() => {/* handleQuantityChange(item.id, item.quantity, -1) */}}
+                      className="item-delete-btn"
+                      onClick={() => handleRemoveItem(itemId)}
+                      title="Remove item"
                     >
-                      -
-                    </button>
-                    <span className="qty-val">{item.quantity}</span>
-                    <button
-                      className="stepper-btn"
-                      onClick={() => {/* handleQuantityChange(item.id, item.quantity, 1) */}}
-                    >
-                      +
+                      &times;
                     </button>
                   </div>
-
-                  <div className="item-subtotal">
-                    ₹{item.price * item.quantity}
-                  </div>
-
-                  <button
-                    className="item-delete-btn"
-                    onClick={() => {/* handleRemoveItem(item.id) */}}
-                    title="Remove item"
-                  >
-                    &times;
-                  </button>
-                </div>
-              ))}
+                );
+              })}
             </div>
 
             {/* Right Summary Sidebar */}
@@ -186,7 +165,7 @@ const Cart = () => {
 
                 <button
                   className="btn-checkout"
-                  onClick={() => {/* handleCheckout() */}}
+                  onClick={() => navigate("/order-summary")}
                 >
                   Proceed to Checkout &rarr;
                 </button>

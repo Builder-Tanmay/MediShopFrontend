@@ -199,3 +199,125 @@
     display: none;
   }
 }
+
+/* User Profile Avatar & Dropdown Styles */
+.user-profile-dropdown-container {
+  position: relative;
+  display: inline-block;
+}
+
+.avatar-btn {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--teal-primary, #00bba7), #0f6292);
+  color: #ffffff;
+  font-size: 1.15rem;
+  font-weight: 700;
+  border: 2px solid #ffffff;
+  box-shadow: 0 4px 12px rgba(0, 187, 167, 0.3);
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.avatar-btn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 6px 16px rgba(0, 187, 167, 0.4);
+}
+
+.user-dropdown-menu {
+  position: absolute;
+  top: 52px;
+  right: 0;
+  width: 220px;
+  background: rgba(255, 255, 255, 0.96);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(226, 232, 240, 0.9);
+  border-radius: 16px;
+  box-shadow: 0 15px 35px rgba(15, 23, 42, 0.12);
+  padding: 0.8rem;
+  z-index: 2000;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  animation: dropdownSlide 0.2s ease;
+}
+
+@keyframes dropdownSlide {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.dropdown-user-header {
+  padding: 0.4rem 0.6rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.user-welcome {
+  font-size: 0.78rem;
+  color: #64748b;
+}
+
+.user-display-name {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #0f172a;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-transform: capitalize;
+}
+
+.dropdown-divider {
+  border: none;
+  border-top: 1px solid #e2e8f0;
+  margin: 0.4rem 0;
+}
+
+.dropdown-item-link {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  padding: 0.6rem 0.8rem;
+  color: #334155;
+  text-decoration: none;
+  font-size: 0.9rem;
+  font-weight: 500;
+  border-radius: 10px;
+  transition: all 0.2s ease;
+}
+
+.dropdown-item-link:hover {
+  background-color: rgba(0, 187, 167, 0.1);
+  color: #0d9488;
+}
+
+.dropdown-logout-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  padding: 0.6rem 0.8rem;
+  color: #ef4444;
+  background: transparent;
+  border: none;
+  font-size: 0.9rem;
+  font-weight: 600;
+  border-radius: 10px;
+  cursor: pointer;
+  width: 100%;
+  text-align: left;
+  transition: all 0.2s ease;
+}
+
+.dropdown-logout-btn:hover {
+  background-color: #fef2f2;
+  color: #dc2626;
+}
